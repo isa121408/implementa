@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en"></html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DragonBallz</title>
+
+    </head>
+    <body>
+        <style>
+            :root{
+                --color-primario: #afcbb8;
+                --color-secundario: #678c73;
+                --color-teciario: #5e9f73;
+                --color-cuarto: #62ba7e;
+                --color-quinto: #68a17a;
+            }
+            *{
+                box-sizing:border-box
+            }
+            body {
+            background-color: var(--color-primario);
+            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            margin: 0;
+        }
+        header{
+            padding: 15px;
+            display: flex;
+            justify-content: flex-end;
+            background-color: var(--color-secundario);
+        }
+        .search{
+            background-color: var(--color-primario);
+            border: 2px solid var(--color-teciario);
+            border-radius: 50px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-size: 15px;
+            padding: 8px 15px;
+            color: var(--color-teciario);
+            }    
+            .search::placeholder{
+                color: var(--color-teciario);
+            }
+            .search:focus{
+                outline: none;
+                background-color: var(--color-quinto);
+            }
+            main{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .personaje{
+                width: 400px;
+                margin: 15px;
+                background-color: var(--color-secundario);
+                box-shadow: 0 5px 5px black;
+                position: relative;
+                overflow: hidden;
+                border-radius: 15px;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+            }
+            .personaje img{
+            width: 80px;
+            height: 400px;
+            object-fit: contain;
+        }
+        .personaje-info{
+            color: var(--color-terceario);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px 15px 15px;
+            letter-spacing: 5px;
+        }
+        .personaje-info h3{
+            color: var(--color-teciario);
+            margin-top: 0;
+        }
+        .overview{
+            background-color: var(--color-primario);
+            padding: 1rem;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            max-height: 100%;
+            transform: translateY(101%);
+            overflow-y: auto;
+            transition: transform 0.3s ease-in;
+        }
+        .personaje:hover .overview{
+            transform: translateY(0);
+        }
+        </style>
+        <header>
+            <form id="form">
+                <img src="dragonball.jpg" alt="logo" style="width: 100px";>
+                <input type="text" id="search" class="search" placeholder="Buscar Personajes">
+            </form>
+        </header>
+<script>
+    const API_URL = 'https://dragonball-api.com/api/characters';
+    
+    const main = document.getElementById('main');
+    const form = document.getElementById('form');
+    const search = document.getElementById('search');
+
+    getCharacters(API_URL)
+        async function getCharacters(url){
+        const res= await fetch(url);
+        const data = await res.jso();
+
+        showcharacters(data.items || data);
+    }
+    function showcharacters(personajes){ 
+        main.innerHTMl = '';
+        movies.forEach((personaje) => {
+        //en esta linea se va a poner todos los elementos al principio, para eso el forEach, es similar al "for", pero el for tiene su inializacion, condicion y limitante
+        const {name, image, ki, maxKi, description, race} = personaje;
+        //esta tiene lo que nos va a ingresar del API que vamos a obtener 
+        const personajelements = document.createElemnt('div');
+        personaje.classList.add('personaje');
+        personajeElements.innerHTMl = `
+
+        <img src ="${image}" alt = "${name}">
+                <div class ="personaje-info">
+                <h1>${id}</h1>
+                <h3>${name}</h3>       
+               <br>
+               ${race}
+               </div>
+               <div class = "descripcion">
+                <h3>Descripcion</h3>
+                ${description}
+                <p><strong> Ki:</strong> ${ki}</p>
+                <p><strong> Max Ki:</strong> ${maxKi}</p>
+                <p>${description || "Sin  descripcion disponible"}</p>
+                </div>`
+                main.appendChild(characterEl);
+    });
+}
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+            const searchTerm = search.value.toLowerCase();
+            if(searchTerm && search !== ''){
+                getCharacters(API_URL + `?name=${searchTerm}`)
+                search.value = '';    
+            } else {
+                window.location.reload();
+            }
+        });
+        </script>
+    </body> 
+</html>
